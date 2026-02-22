@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feliz Cumpleaños, Mi Amor</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  <div class="bokeh-background">
+    <!-- Partículas de luz simuladas por CSS -->
+    <div class="light-particle"></div>
+    <div class="light-particle"></div>
+    <div class="light-particle"></div>
+    <div class="light-particle"></div>
+    <div class="light-particle"></div>
+  </div>
+
+  <div class="scene">
+    <div class="box-shadow"></div>
+    <div class="puzzle-box" id="puzzleBox">
+      <div class="box-lid" id="boxLid">
+        <div class="lid-top"></div>
+        <div class="lid-front"></div>
+        <div class="lid-back"></div>
+        <div class="lid-left"></div>
+        <div class="lid-right"></div>
+        <div class="lid-ornament"></div>
+      </div>
+      <div class="box-bottom">
+        <div class="bottom-front"></div>
+        <div class="bottom-back"></div>
+        <div class="bottom-left"></div>
+        <div class="bottom-right"></div>
+        <div class="bottom-base"></div>
+      </div>
+
+      <div class="polaroid-container" id="polaroidContainer">
+        <!-- Las polaroids se inyectarán aquí vía JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Controles del Carrusel (Ocultos inicialmente) -->
+  <div class="carousel-controls" id="carouselControls">
+    <button id="prevBtn" class="nav-arrow">&lsaquo;</button>
+    <button id="nextBtn" class="nav-arrow">&rsaquo;</button>
+    <button id="saveBtn" class="save-btn">Guardar todas</button>
+  </div>
+
+  <!-- Sonido opcional (comentado por defecto para no asustar al cargar) -->
+  <!-- <audio id="bgMusic" loop>
+        <source src="assets/romantic_piano.mp3" type="audio/mpeg">
+    </audio> -->
+
+  <script src="script.js"></script>
+</body>
+
+</html>

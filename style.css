@@ -1,0 +1,539 @@
+/* =========================================================================
+   VARIABLES & RESET
+   ========================================================================= */
+:root {
+  --bg-color-dark: #050a15;
+  --bg-color-light: #122240;
+  --gold: #d4af37;
+  --gold-light: #f3e5ab;
+  --wood-dark: #2a1b12;
+  --wood-light: #4a3020;
+  --cream: #fdfbf7;
+  --shadow-color: rgba(0, 0, 0, 0.8);
+  --polaroid-bg: #faf8f5;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-color-dark);
+  color: var(--gold-light);
+  font-family: "Cinzel", serif;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px;
+  /* Crucial para el efecto 3D */
+}
+
+/* =========================================================================
+   BOKEH BACKGROUND
+   ========================================================================= */
+.bokeh-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: radial-gradient(circle at 50% 50%,
+      var(--bg-color-light) 0%,
+      var(--bg-color-dark) 80%);
+  filter: blur(10px);
+}
+
+.light-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+      rgba(212, 175, 55, 0.2) 0%,
+      rgba(212, 175, 55, 0) 70%);
+  filter: blur(20px);
+  animation: floating-light 10s infinite alternate ease-in-out;
+}
+
+.light-particle:nth-child(1) {
+  width: 30vw;
+  height: 30vw;
+  top: -10%;
+  left: -10%;
+  animation-delay: 0s;
+}
+
+.light-particle:nth-child(2) {
+  width: 40vw;
+  height: 40vw;
+  bottom: -20%;
+  right: -10%;
+  animation-delay: -2s;
+  background: radial-gradient(circle,
+      rgba(18, 34, 64, 0.4) 0%,
+      rgba(0, 0, 0, 0) 70%);
+}
+
+.light-particle:nth-child(3) {
+  width: 20vw;
+  height: 20vw;
+  top: 40%;
+  left: 20%;
+  animation-delay: -4s;
+  background: radial-gradient(circle,
+      rgba(243, 229, 171, 0.15) 0%,
+      rgba(0, 0, 0, 0) 70%);
+}
+
+.light-particle:nth-child(4) {
+  width: 35vw;
+  height: 35vw;
+  top: 10%;
+  right: 20%;
+  animation-delay: -6s;
+}
+
+.light-particle:nth-child(5) {
+  width: 25vw;
+  height: 25vw;
+  bottom: 10%;
+  left: 30%;
+  animation-delay: -8s;
+}
+
+@keyframes floating-light {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: translate(5%, -5%) scale(1.1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-5%, 5%) scale(0.9);
+    opacity: 0.7;
+  }
+}
+
+/* =========================================================================
+   3D SCENE & BOX CONTAINER
+   ========================================================================= */
+.scene {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  transform-style: preserve-3d;
+  /* Inclinación inicial para ver la profundidad */
+  transform: rotateX(-15deg) rotateY(25deg);
+  transition: transform 0.3s ease-out;
+  /* Para la interacción magnética */
+  transform-origin: center center;
+}
+
+@media (max-width: 600px) {
+  .scene {
+    transform: rotateX(-15deg) rotateY(25deg) scale(0.55);
+    margin-top: 10vh;
+  }
+
+  .polaroid {
+    width: 140px;
+    height: 180px;
+    top: -90px;
+    left: -70px;
+  }
+
+  /* Achicamos la letra para que entre en la tarjetita */
+  .polaroid-text-container h3 {
+    font-size: 0.6rem;
+  }
+
+  .polaroid-text-container p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Sombra proyectada por la caja flotante */
+.box-shadow {
+  position: absolute;
+  bottom: -150px;
+  left: 50%;
+  transform: translateX(-50%) rotateX(90deg);
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(ellipse at center,
+      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 0) 70%);
+  filter: blur(15px);
+  animation: shadow-breathe 6s infinite ease-in-out;
+}
+
+.puzzle-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  animation: float-breathe 6s infinite ease-in-out;
+}
+
+/* =========================================================================
+   ANIMATIONS: FLOAT & BREATHE
+   ========================================================================= */
+@keyframes float-breathe {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes shadow-breathe {
+  0% {
+    transform: translateX(-50%) rotateX(90deg) scale(1);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: translateX(-50%) rotateX(90deg) scale(0.9);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateX(-50%) rotateX(90deg) scale(1);
+    opacity: 0.8;
+  }
+}
+
+/* =========================================================================
+   BOX FACES & MATERIALS
+   ========================================================================= */
+.box-bottom,
+.box-lid {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.box-lid {
+  transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: bottom center;
+}
+
+.puzzle-box.open .box-lid {
+  /* Animación de apertura: se levanta, rota un poco y se desplaza hacia atrás */
+  transform: translateY(-150px) translateZ(-100px) rotateX(45deg) rotateY(15deg);
+  opacity: 0.3;
+  /* Opcional: difuminar la tapa cuando está abierta */
+}
+
+/* Base styling for all faces */
+.puzzle-box div[class^="bottom-"],
+.puzzle-box div[class^="lid-"] {
+  position: absolute;
+  background: linear-gradient(135deg, var(--wood-light), var(--wood-dark));
+  border: 3px solid var(--gold);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+  /* Oclusión ambiental interna */
+}
+
+/* Detalles ornamentales (oro) sobre la madera */
+.puzzle-box div[class^="bottom-"]::after,
+.puzzle-box div[class^="lid-"]::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  /* Detalle de oro interior */
+  border-radius: 5px;
+}
+
+/* Tamaños de la parte inferior (Cuerpo de la caja) 
+   Ancho: 200px, Alto: 100px, Profundidad: 200px
+*/
+.bottom-front {
+  width: 200px;
+  height: 100px;
+  transform: translate3d(50px, 150px, 100px);
+}
+
+.bottom-back {
+  width: 200px;
+  height: 100px;
+  transform: translate3d(50px, 150px, -100px) rotateY(180deg);
+}
+
+.bottom-left {
+  width: 200px;
+  height: 100px;
+  transform: translate3d(-50px, 150px, 0) rotateY(-90deg);
+}
+
+.bottom-right {
+  width: 200px;
+  height: 100px;
+  transform: translate3d(150px, 150px, 0) rotateY(90deg);
+}
+
+.bottom-base {
+  width: 200px;
+  height: 200px;
+  transform: translate3d(50px, 200px, 0) rotateX(-90deg);
+  /* Textura interior de terciopelo para la base */
+  background: linear-gradient(45deg, #1a0b12, #3a1528);
+}
+
+/* Tamaños de la tapa
+   Ancho: 210px, Alto: 40px, Profundidad: 210px (un poco más ancha que el cuerpo)
+*/
+.box-lid {
+  /* Mover el contenedor de la tapa a la posición correcta sobre la caja */
+  transform-origin: 150px 150px 0;
+}
+
+.lid-top {
+  width: 210px;
+  height: 210px;
+  transform: translate3d(45px, 110px, 0) rotateX(90deg);
+}
+
+.lid-front {
+  width: 210px;
+  height: 40px;
+  transform: translate3d(45px, 110px, 105px);
+}
+
+.lid-back {
+  width: 210px;
+  height: 40px;
+  transform: translate3d(45px, 110px, -105px) rotateY(180deg);
+}
+
+.lid-left {
+  width: 210px;
+  height: 40px;
+  transform: translate3d(-60px, 110px, 0) rotateY(-90deg);
+}
+
+.lid-right {
+  width: 210px;
+  height: 40px;
+  transform: translate3d(150px, 110px, 0) rotateY(90deg);
+}
+
+.lid-ornament {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 1px) rotateX(90deg);
+  /* Ligeramente por encima de la tapa superior */
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold-light), var(--gold));
+  box-shadow:
+    0 5px 15px rgba(0, 0, 0, 0.5),
+    inset 0 2px 5px rgba(255, 255, 255, 0.5);
+  /* Desplazar a su posición correcta (combinando lid-top transform) */
+  transform: translate3d(150px, 110px, 0) rotateX(90deg);
+}
+
+/* Corrección del ornamento para que sea hijo de lid-top visualmente o posicionado absolutamente respecto a box-lid */
+
+/* =========================================================================
+   CAROUSEL CONTROLS
+   ========================================================================= */
+.carousel-controls {
+  position: absolute;
+  bottom: 2vh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
+.puzzle-box.open~.carousel-controls,
+/* En caso de que estén hermanos */
+.scene:has(.puzzle-box.open)~.carousel-controls,
+.carousel-controls.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nav-arrow {
+  background: rgba(18, 34, 64, 0.6);
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.nav-arrow:hover,
+.nav-arrow:active {
+  background: rgba(212, 175, 55, 0.3);
+  transform: scale(1.1);
+}
+
+.save-btn {
+  position: absolute;
+  top: -60px;
+  /* Sobre las flechas */
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  padding: 10px 25px;
+  background: rgba(18, 34, 64, 0.8);
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+  font-family: "Cinzel", serif;
+  font-size: 1rem;
+  border-radius: 25px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  white-space: nowrap;
+}
+
+.save-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.save-btn:hover,
+.save-btn:active {
+  background: rgba(212, 175, 55, 0.4);
+  transform: translateX(-50%) translateY(0) scale(1.05);
+}
+
+/* =========================================================================
+   POLAROIDS (DECK OF CARDS)
+   ========================================================================= */
+.polaroid-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  z-index: 20;
+}
+
+.polaroid {
+  position: absolute;
+  width: 240px;
+  /* Cambiado a px fijos para controlar el desborde */
+  height: 300px;
+  background: var(--polaroid-bg);
+  padding: 3% 3% 5% 3%;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(0, 0, 0, 0.1);
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s ease;
+  top: -150px;
+  left: -120px;
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 460px) {
+  .polaroid {
+    top: -200px;
+    left: -160px;
+  }
+}
+
+.polaroid:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.05"/></svg>');
+  pointer-events: none;
+  z-index: 5;
+}
+
+.polaroid-image-container {
+  width: 100%;
+  flex-grow: 1;
+  background: #000;
+  overflow: hidden;
+}
+
+.polaroid-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(0.2) contrast(1.1) brightness(0.9);
+}
+
+.polaroid-text-container {
+  width: 100%;
+  height: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  /* Alinear abajo */
+  align-items: center;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.polaroid-text-container h3 {
+  font-family: "Cinzel", serif;
+  font-size: clamp(0.7rem, 3vw, 1rem);
+  color: var(--gold);
+  margin-bottom: 2px;
+}
+
+.polaroid-text-container p {
+  font-family: "Great Vibes", cursive;
+  font-size: clamp(1.2rem, 5vw, 1.8rem);
+  color: var(--wood-dark);
+  line-height: 1.1;
+  padding: 0 5px;
+}
+
+/* Clases dinámicas manejadas por JS para el Carrusel */
+.puzzle-box.open .polaroid {
+  opacity: 1;
+  pointer-events: auto;
+}
