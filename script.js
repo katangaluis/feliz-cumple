@@ -87,6 +87,11 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       `;
 
+      // Prevenir bug visual de la última carta apareciendo encima brevemente
+      el.style.zIndex = index === 0 ? 100 : 50 - index;
+      // Iniciar desde el centro para que florezcan hacia arriba suavemente
+      el.style.transform = `translate3d(0, 0, 0) scale(0.5)`;
+
       polaroidContainer.appendChild(el);
       polaroidElements.push(el);
 
@@ -115,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const direction = Math.sign(diff);
 
       let xOffset = 0;
-      let yOffset = isMobile ? -30 : -150;
+      let yOffset = isMobile ? -100 : -220; // Más arriba para despejar la caja
       let zOffset = isMobile ? 0 : 200;
       let rotateY = -25;
       let rotateX = 15;
@@ -134,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const baseSpacing = isMobile ? 40 : 180;
         xOffset = direction * (baseSpacing + absDiff * (isMobile ? 10 : 15));
 
-        yOffset = (isMobile ? -20 : -100) + absDiff * 10;
+        yOffset = (isMobile ? -90 : -170) + absDiff * 10;
         zOffset = (isMobile ? -30 : 50) - absDiff * 60;
 
         rotateY = -25 + direction * (isMobile ? 8 : 15) * absDiff;
